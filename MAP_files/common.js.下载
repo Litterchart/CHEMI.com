@@ -1,0 +1,380 @@
+﻿$(function(){
+	$("#header .search .search_from input.search_text").Default_Values({focus_class:"on_foucs",def_val:""}); 
+  $(".nav_list li").each(function(){
+	$(this).append("<div class='cur_bg'></div>");  
+  });
+  $(".nav_list li:last").css("background-image","none");
+  $(".nav_list li.cur").find("div.cur_bg").css("display","block");
+  $(".nav_list li a").hover(
+    function(){
+	 if(!$(this).parent("li").hasClass("cur")){
+	   $(this).find("span").addClass("hover");
+	   $(this).parent("li").find("div.cur_bg").css("display","block");
+	 }	
+	},
+	function(){
+	  if(!$(this).parent("li").hasClass("cur")){
+	   $(this).find("span").removeClass("hover");
+	   $(this).parent("li").find("div.cur_bg").css("display","none");
+	 }
+	}
+  );
+  
+
+
+
+
+/**/
+/*$(".select_item select.line_select,.form_item select.line_select").change(function(){
+  var _line_self = $(this);
+  var line_name = $(this).val();
+  var _none = '<option value="none">请选择</option>';
+  var _html = ''; 
+  if(line_name!=='none'){
+	/*ajax*/
+	/*$.ajax({
+	  url:'http://test06.w186.mc-test.com/shanghaiditie/skin/xml/station_name.xml',
+	  type:'GET',
+	  dataType:'xml',
+	  timeout:5000,
+	  cache:false,
+	  error: function(xml){ alert ('站点名称xml加载出错');},
+	  success:function(xml){
+		  var _count =  $(xml).find(line_name).length;
+		if(_count==1){
+			$(xml).find(line_name).find("station_name").each(function(){
+		       var item = "<option"+" "+"value= "+"\""+$(this).attr('value')+"\""+">"+$(this).text()+"</option>"
+		      _html+=item ;
+		    });
+		  _html=_none+_html;
+		  _line_self.siblings("select.station_name").html(_html);
+		}else{
+		  alert ("找不到该线路数据...");	
+		} 
+	  }
+	});  
+	/*ajax*/
+/*  }
+  
+})
+
+/**/
+
+
+ $(".run_link a").Hover();
+  
+  $(".schedule .schedule_top span.first_time").click(function(){
+	$(this).addClass("cur").siblings("span").removeClass("cur"); 
+	$(".schedule .schedule_con .first_time_area").css("display","block").siblings("div").css("display","none")
+  });
+  
+  $(".schedule .schedule_top span.area_map").click(function(){
+	$(this).addClass("cur").siblings("span").removeClass("cur"); 
+	$(".schedule .schedule_con .area_map_area").css("display","block").siblings("div").css("display","none")
+  });
+  $(".schedule .schedule_top span.first_time").trigger("click");
+  
+  $(".other_link tr").each(function(){
+	$(this).find("td:last").find("a").css("float","right");  
+  });
+
+
+
+  
+})
+
+/*******************************************以下为自定义函数************************************************/
+$(function(){
+	$("#favorites").click(function () {
+		var url = "http://114.80.218.33",name="上海申通地铁集团有限公司";
+		if(document.all) { 
+		  window.external.addFavorite(url, name);
+		} else if (window.sidebar) { 
+		  window.sidebar.addPanel(name, url, "");
+		} else {
+		  var ctrl = (navigator.userAgent.toLowerCase()).indexOf('mac') != -1 ? 'Command/Cmd' : 'CTRL';
+		  alert('添加失败\n您可以尝试通过快捷键' + ctrl + ' + D 加入到收藏夹!');
+		} 
+	});
+
+	$("#share,#sharediv").bind({
+		mouseover:function(){$("#sharediv").stop(true,true).show();},  
+		mouseout:function(){$("#sharediv").fadeOut(1000);}  
+	});
+	//放大&缩小
+	function set() { 
+	if(fontSizeScale==1){
+		document.body.style.transform="none";
+	}else{
+	document.body.style.transform = "scale("+fontSizeScale+")";
+	}
+	document.body.style.cssText += 'transform-origin: 50% 0; ';     //
+	} 
+	$('#fontSizeHigh').click(function(){
+		fontSizeScale+=0.1;
+		set();
+	})
+	$('#fontSizeLow').click(function(){
+		fontSizeScale-=0.1;
+		set();
+	})
+	$('#fontSizeRe').click(function(){
+		fontSizeScale=1;
+		set();
+	})
+	
+	var fontSizeScale=1;
+	$("#changefontsize,#fontsizechange").bind({
+		mouseover:function(){$("#fontsizechange").stop(true,true).show();},  
+		mouseout:function(){$("#fontsizechange").fadeOut(1000);}  
+	});
+	
+	// share
+	// http://open.weibo.com/sharebutton
+	var shareurl = "http://114.80.218.33",sharecontent="我发现一个不错的网页，它叫上海地铁运营服务专页，里面信息是由上海地铁官方发布的，有地铁新闻、地铁实况、路径查询、票卡介绍、地铁官方指南及其他资料下载等等信息。来自官方，值得信赖哦~赶紧去瞧瞧吧~";
+	$("#sharexl").click(function () {
+		window.open("http://service.weibo.com/share/share.php?url="+encodeURIComponent(shareurl)+"&title="+encodeURIComponent(sharecontent),"");
+	});
+	// http://open.t.qq.com/apps/share/explain.php
+	$("#sharetx").click(function () {
+		window.open("http://share.v.t.qq.com/index.php?c=share&a=index&url="+encodeURIComponent(shareurl)+"&title="+encodeURIComponent(sharecontent),"");
+	});
+	$("#shareqq").click(function () {
+		window.open("http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url="+encodeURIComponent(shareurl)+"&title="+encodeURIComponent(sharecontent),"");
+	});
+    // weixin
+    $("#sharewx,#shareconwx,#weixin,#weixin_app").click(function () {
+		
+        $("#share_weixin_qrcode").children().remove();
+		var url=location.href;
+		var shareWeixin= new QRCode('share_weixin_qrcode',{
+			text:url,
+			width:256,
+			height:256,
+			colorDark:'#000000',
+			colorLight:'#ffffff',
+			correctLevel:QRCode.CorrectLevel.H
+		})
+        $("#share_weixin").show();
+    });
+    $("#share_weixin").click(function () {
+        $("#share_weixin").hide();
+    });
+});
+function strToJson(str) {
+    var json = (new Function("return " + str))();
+    return json;
+}
+
+function chktellnk(a) {
+    var lnk = $(a);
+    return /tel:/.test(lnk.attr('href'));
+}
+
+//页面载入
+$(function () {
+
+    //菜单效果
+    $(".index_pagetop_menu a").click(function (e) {
+        var a = $(this);
+        var ulitem = $(".index_pagetop_menulist")
+        if (ulitem.css("display") == "none") {
+            //展开
+            $(".index_pagetop_menulist ul").css("display", "none");
+            $(".index_pagetop_menulist > li > a").removeClass("highlight");
+            var li = $(".index_pagetop_menulist > li");
+            if (isfixed) {
+                //背景不滚动
+                var scrollTop = $(document.documentElement).scrollTop(0) || $(document.body).scrollTop(0);
+                var scrollLeft = $(document.documentElement).scrollLeft(0) || $(document.body).scrollLeft(0);
+                $('body').css('height', $(window).height() + 'px').css('overflow', 'hidden');
+                //全屏浮动
+                ulitem.stop(true, false);
+                ulitem.css("height", "0px");
+                ulitem.css("display", "block");
+                ulitem.animate({ "height": $(window).height() - 60 + "px" }, "fast", function () {
+                    var img = a.find('img');
+                    var imgsrc = img.attr('src');
+                    imgsrc = imgsrc.replace('.', '_h.');
+                    img.attr('src', imgsrc);
+                });
+            }
+            else {
+
+                var liheight = 45;
+                var licount = li.size();
+                ulitem.stop(true, false);
+                ulitem.css("height", "0px");
+                ulitem.css("display", "block");
+                ulitem.animate({ "height": (parseInt(licount) * liheight) + "px" }, "fast", function () {
+                    var img = a.find('img');
+                    var imgsrc = img.attr('src');
+                    imgsrc = imgsrc.replace('.', '_h.');
+                    img.attr('src', imgsrc);
+                });
+            }
+        }
+        else {
+            //收起
+            ulitem.stop(true, false);
+            ulitem.animate({ "height": "0px" }, "fast", function () {
+                ulitem.css("display", "none");
+                var img = a.find('img');
+                var imgsrc = img.attr('src');
+                imgsrc = imgsrc.replace('_h.', '.');
+                img.attr('src', imgsrc);
+            });
+            if (isfixed) {
+                $('body').css('overflow', 'auto').css('height', 'auto');
+            }
+        }
+    });
+
+    //子菜单效果
+    $(".index_pagetop_menulist > li > a").click(function (e) {
+        var a = $(this);
+        var ulitem = $(this).parent().find("ul");
+        if (ulitem.size() >= 1) {
+            var mainitem = $(".index_pagetop_menulist");
+            var mainitemheight = mainitem.css("height").replace("px", "");
+            var licount = ulitem.find("li").size();
+            var liheight = 35;
+            if (ulitem.css("display") == "none") {
+                //展开
+                ulitem.stop(true, false);
+                ulitem.css("height", "0px")
+                ulitem.css("display", "block");
+                ulitem.animate({ "height": (parseInt(licount) * liheight) + "px" }, "fast", function () {
+                    a.addClass('highlight');
+                });
+                if (isfixed) {
+                    return false;
+                }
+                else {
+                    mainitem.stop(true, false);
+                    mainitem.animate({ "height": (parseInt(licount * liheight) + parseInt(mainitemheight)) + "px" }, "fast", function () { });
+                    return false;
+                }
+            }
+            else {
+                //隐藏
+                ulitem.stop(true, false);
+                ulitem.animate({ "height": "0px" }, "fast", function () {
+                    ulitem.css("display", "none");
+                    a.removeClass('highlight');
+                });
+                if (isfixed) {
+                    return false;
+                }
+                else {
+                    mainitem.stop(true, false);
+                    mainitem.animate({ "height": (parseInt(mainitemheight) - parseInt(licount * liheight)) + "px" }, "fast", function () { });
+                    return false;
+                }
+            }
+
+        }
+
+    });
+
+
+    //子菜单效果2
+    /*
+    $(".index_pagetop_menulist > li > a").click(function(e) {
+    var a = $(this);
+    var ulitem = $(this).parent().find("ul");
+        
+    if (ulitem.size() >= 1) {
+    var mainitem = $(".index_pagetop_menulist");
+    var mainitemheight = mainitem.css("height").replace("px", "");
+    var licount = ulitem.find("li").size();
+    var liheight = 35;
+
+    var expda = mainitem.find('.highlight');
+    var expdul = mainitem.find('ul.expdul');
+    var expdulheight = 0;
+    if (expdul.size() >= 1) {
+    expdulheight = parseInt(expdul.css('height').replace("px", ""));
+    }
+    var mainitemheightrest = (licount * liheight) - expdulheight;
+
+    if (a.hasClass('highlight')) {
+    //仅收缩
+    ulitem.stop(true, false);
+    ulitem.animate({ "height": "0px" }, "fast", function() {
+    ulitem.css("display", "none");
+    a.removeClass('highlight');
+    ulitem.removeClass('expdul');
+    });
+    mainitem.stop(true, false);
+    mainitem.animate({ "height": (parseInt(mainitemheight) - parseInt(licount * liheight)) + "px" }, "fast", function() { });
+    }
+    else {
+    //收缩与展开
+    mainitem.stop(true, false);
+    mainitem.animate({ "height": (parseInt(mainitemheight) + parseInt(mainitemheightrest)) + "px" }, "fast", function() { });
+
+    if (expdul.size() >= 1) {
+    //收缩
+    expdul.stop(true, false);
+    expdul.animate({ "height": "0px" }, "fast", function() {
+    expdul.css("display", "none");
+    if (expda.size() >= 1) {
+    expda.removeClass('highlight');
+    }
+    expdul.removeClass('expdul');
+    });
+    }
+    else if (expda.size() >= 1) {
+    expda.removeClass('highlight');
+    }
+
+    //展开
+    ulitem.stop(true, false);
+    ulitem.css("height", "0px")
+    ulitem.css("display", "block");
+    ulitem.animate({ "height": (parseInt(licount) * liheight) + "px" }, "fast", function() {
+    a.addClass('highlight');
+    ulitem.addClass('expdul');
+    });
+    }
+
+    }
+    return false;
+    });
+    */
+
+    //wei tabs 切换效果
+    $('.index_wei_tabs ul li').each(function (i) {
+        $(this).find('a').click(function (e) {
+            var a = $(this);
+            if (!a.parent().hasClass("highlight")) {
+                $('.index_wei_tabs_c').hide();
+                $('.index_wei_tabs_' + i + "c").show();
+                var img = a.find('img');
+                var imgsrc = img.attr("src");
+                img.attr("src", imgsrc.replace("_h.", "."));
+                var hli = a.parent().parent().find('.highlight')
+                hli.removeClass('highlight');
+                img = hli.find("a > img");
+                imgsrc = img.attr("src");
+                img.attr("src", imgsrc.replace(".", "_h."));
+                a.parent().addClass("highlight");
+            }
+        });
+    });
+
+    //去除非移动版浏览器中电话连接
+    //alert(navigator.userAgent.toLowerCase());
+    if (!/mobile/.test(navigator.userAgent.toLowerCase())) {
+        $('a').each(function () {
+            if (chktellnk($(this))) {
+                $(this).attr('href', 'javascript:void(0)');
+            }
+
+        });
+    }
+
+});
+
+
